@@ -10,7 +10,7 @@ class Airplane(models.Model):
     sub_model_name = models.CharField(max_length=20)
 
     def __str__(self):
-        return "%s %s %s %s %s" % (self.airplane_id, self.airplane_number, self.manufacturer_name, self.model_name, self.sub_model_name)
+        return "%s %s %s %s" (self.airplane_number, self.manufacturer_name, self.model_name, self.sub_model_name)
 
 
 # class Article(models.Model):
