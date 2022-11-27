@@ -25,9 +25,9 @@
 
                         {% if model.admin_url and show_changelinks %}
                             {% if model.view_only %}
-                                <td><a href="{{ model.admin_url }}" class="viewlink">{% translate 'View' %}</a></td>
+                                <td><a href="{{ model.admin_url }}">{% translate 'View' %}</a></td>
                             {% else %}
-                                <td><a href="{{ model.admin_url }}" class="changelink">{% translate 'Change' %}</a></td>
+                                <td><a href="{{ model.admin_url }}">{% translate 'Edit' %}</a></td>
                             {% endif %}
                         {% elif show_changelinks %}
                             <td></td>
