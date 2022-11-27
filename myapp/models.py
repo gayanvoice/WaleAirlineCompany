@@ -10,11 +10,7 @@ class Airplane(models.Model):
     sub_model_name = models.CharField(max_length=20)
 
     def __str__(self):
-        return self.airplane_number
-
-    @classmethod
-    def get_all_choices(cls):
-        return cls.objects.values_list('airplane_id', flat=True)
+        return self.airplane_number + ' - ' + self.manufacturer_name + '/' + self.model_name + '/' + self.sub_model_name
 
 
 class Employee(models.Model):
@@ -26,7 +22,7 @@ class Employee(models.Model):
     phone = models.CharField(max_length=20)
 
     def __str__(self):
-        return self.job_name + ' ' + self.surname + ' ' + self.other_names
+        return self.job_name + '/' + self.surname + ' ' + self.other_names
 
 
 class Passenger(models.Model):
@@ -47,7 +43,7 @@ class Passenger(models.Model):
     authority = models.CharField(max_length=20)
 
     def __str__(self):
-        return self.passport_no
+        return self.passport_no + ' - ' + self.country_code + '/' + self.surname + ' ' + self.other_names
 
 
 class FlightSchedule(models.Model):
@@ -72,11 +68,12 @@ class FlightSchedule(models.Model):
     )
 
     def __str__(self):
-        return str(self.flight_schedule_id)
+        return str(self.flight_schedule_id) + ' - ' + self.origin + ' (' + str(self.departure_time.date()) + ') / ' + self.destination + ' (' + str(self.arrival_time.date()) + ')'
 
 
 class EmployeeSchedule(models.Model):
     employee_schedule_id = models.AutoField(primary_key=True)
+    passenger_id = models.ForeignKey(Passenger, on_delete=models.CASCADE)
     flight_schedule_id = models.ForeignKey(FlightSchedule, on_delete=models.CASCADE)
     FULL_TIME = 'FULL_TIME'
     PART_TIME = 'FULL_TIME'
@@ -93,7 +90,7 @@ class EmployeeSchedule(models.Model):
     )
 
     def __str__(self):
-        return str(self.employee_schedule_id)
+        return str(self.employee_schedule_id) + ' - ' + str(self.passenger_id) + '/' + str(self.flight_schedule_id)
 
 
 class Class(models.Model):
@@ -103,7 +100,7 @@ class Class(models.Model):
     price = models.FloatField()
 
     def __str__(self):
-        return str(self.class_id)
+        return str(self.airplane_id) + ' - ' + self.name
 
 
 class Seat(models.Model):
@@ -112,13 +109,12 @@ class Seat(models.Model):
     code = models.CharField(max_length=10)
 
     def __str__(self):
-        return str(self.seat_id)
+        return str(self.class_id) + ' - ' + str(self.seat_id) + '/' + self.code
 
 
 class Booking(models.Model):
     book_id = models.AutoField(primary_key=True)
-    airplane_id = models.ForeignKey(Airplane, on_delete=models.CASCADE)
-    class_id = models.ForeignKey(Class, on_delete=models.CASCADE)
+    passenger_id = models.ForeignKey(Passenger, on_delete=models.CASCADE)
     seat_id = models.ForeignKey(Seat, on_delete=models.CASCADE)
     AVAILABLE = 'AVAILABLE'
     RESERVE = 'RESERVE'
@@ -134,4 +130,3 @@ class Booking(models.Model):
 
     def __str__(self):
         return str(self.seat_id)
-

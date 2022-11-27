@@ -12,6 +12,10 @@ from .models import Booking
 
 # Register your models here.
 
+
+
+
+
 admin.site.register(Airplane)
 admin.site.register(Employee)
 admin.site.register(Passenger)
