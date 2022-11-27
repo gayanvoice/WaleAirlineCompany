@@ -16,8 +16,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, reverse_lazy
 from django.views.generic import RedirectView
+from myapp.views import details
+
+from myapp import views
 
 urlpatterns = [
     path('', RedirectView.as_view(url=reverse_lazy('admin:index'))),
     path('admin/', admin.site.urls),
+    path('report/details', details)
 ]
