@@ -15,11 +15,25 @@ class Airplane(models.Model):
 
 class Employee(models.Model):
     employee_id = models.AutoField(primary_key=True)
-    job_name = models.CharField(max_length=10)
     surname = models.CharField(max_length=45)
     other_names = models.CharField(max_length=45)
     address = models.CharField(max_length=200)
     phone = models.CharField(max_length=20)
+    pilot_rating = models.CharField(max_length=20, null=True)
+    HOST = 'HOST'
+    PILOT = 'PILOT'
+    OTHER = 'OTHER'
+    JOB_CHOICES = [
+        (HOST, 'HOST'),
+        (PILOT, 'PILOT'),
+        (OTHER, 'OTHER')
+    ]
+    job_name = models.CharField(
+        max_length=10,
+        choices=JOB_CHOICES,
+        default=OTHER,
+    )
+    airplane = models.ForeignKey(Airplane, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
         return self.job_name + '/' + self.surname + ' ' + self.other_names
@@ -48,7 +62,7 @@ class Passenger(models.Model):
 
 class FlightSchedule(models.Model):
     flight_schedule_id = models.AutoField(primary_key=True)
-    airplane_id = models.ForeignKey(Airplane, on_delete=models.CASCADE)
+    airplane = models.ForeignKey(Airplane, on_delete=models.CASCADE)
     origin = models.CharField(max_length=20)
     destination = models.CharField(max_length=20)
     departure_time = models.DateTimeField()
@@ -74,8 +88,8 @@ class FlightSchedule(models.Model):
 
 class EmployeeSchedule(models.Model):
     employee_schedule_id = models.AutoField(primary_key=True)
-    passenger_id = models.ForeignKey(Passenger, on_delete=models.CASCADE)
-    flight_schedule_id = models.ForeignKey(FlightSchedule, on_delete=models.CASCADE)
+    passenger = models.ForeignKey(Passenger, on_delete=models.CASCADE)
+    flight_schedule = models.ForeignKey(FlightSchedule, on_delete=models.CASCADE)
     FULL_TIME = 'FULL_TIME'
     PART_TIME = 'FULL_TIME'
     CANCEL = 'CANCEL'
@@ -96,7 +110,7 @@ class EmployeeSchedule(models.Model):
 
 class Class(models.Model):
     class_id = models.AutoField(primary_key=True)
-    airplane_id = models.ForeignKey(Airplane, on_delete=models.CASCADE)
+    airplane = models.ForeignKey(Airplane, on_delete=models.CASCADE)
     name = models.CharField(max_length=20)
     price = models.FloatField()
 
@@ -104,19 +118,20 @@ class Class(models.Model):
         return str(self.airplane_id) + ' - ' + self.name
 
 
-class Seat(models.Model):
-    seat_id = models.AutoField(primary_key=True)
-    class_id = models.ForeignKey(Class, on_delete=models.CASCADE)
-    code = models.CharField(max_length=10)
-
-    def __str__(self):
-        return str(self.class_id) + ' - ' + str(self.seat_id) + '/' + self.code
+# class Seat(models.Model):
+#     seat_id = models.AutoField(primary_key=True)
+#     class_id = models.ForeignKey(Class, on_delete=models.CASCADE)
+#     code = models.CharField(max_length=10)
+#
+#     def __str__(self):
+#         return str(self.class_id) + ' - ' + str(self.seat_id) + '/' + self.code
 
 
 class Booking(models.Model):
     book_id = models.AutoField(primary_key=True)
-    passenger_id = models.ForeignKey(Passenger, on_delete=models.CASCADE)
-    seat_id = models.ForeignKey(Seat, on_delete=models.CASCADE)
+    flight_schedule = models.ForeignKey(FlightSchedule, on_delete=models.CASCADE)
+    passenger = models.ForeignKey(Passenger, on_delete=models.CASCADE)
+    class_id = models.ForeignKey(Class, on_delete=models.CASCADE)
     AVAILABLE = 'AVAILABLE'
     RESERVE = 'RESERVE'
     STATUS_CHOICES = [
@@ -128,6 +143,17 @@ class Booking(models.Model):
         choices=STATUS_CHOICES,
         default=RESERVE,
     )
+    DIRECT = 'DIRECT'
+    CONNECT = 'CONNECT'
+    TYPE_CHOICES = [
+        (DIRECT, 'DIRECT'),
+        (CONNECT, 'CONNECT')
+    ]
+    type = models.CharField(
+        max_length=10,
+        choices=TYPE_CHOICES,
+        default=RESERVE
+    )
 
     def __str__(self):
-        return str(self.seat_id)
+        return str(self.flight_schedule) + ' - ' + str(self.passenger)

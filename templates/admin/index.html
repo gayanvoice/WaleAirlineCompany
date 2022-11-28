@@ -1,7 +1,8 @@
 {% extends "admin/base_site.html" %}
 {% load i18n static %}
 
-{% block extrastyle %}{{ block.super }}<link rel="stylesheet" href="{% static "admin/css/dashboard.css" %}">{% endblock %}
+{% block extrastyle %}{{ block.super }}
+    <link rel="stylesheet" href="{% static "admin/css/dashboard.css" %}">{% endblock %}
 
 {% block coltype %}colMS{% endblock %}
 
@@ -14,9 +15,27 @@
 {% block sidebar %} {% endblock %}
 
 {% block content %}
+    <div id="content-main">
+        {% include "admin/app_list.html" with app_list=app_list show_changelinks=True %}
+    </div>
 
-
-<div id="content-main">
-  {% include "admin/app_list.html" with app_list=app_list show_changelinks=True %}
-</div>
+    <div id="content-related">
+        <div class="module" id="recent-actions-module">
+            <h2>Reports</h2>
+            <ul class="actionlist">
+                <li><a href="/report/booking_details">Booking details</a></li>
+                <li><a href="/report/airplane_pilot_details">Machine details and list of pilots eligible to fly it</a></li>
+                <li><a href="/report/passenger_bookings">Passengers and their list of bookings</a></li>
+            </ul>
+        </div>
+      <div class="module" id="recent-actions-module">
+            <ul class="actionlist">
+                <li><a href="/report/flight_schedule">Pilot Schedule</a></li>
+                <li><a href="/report/booking_details">Number of passengers by fligh</a></li>
+                <li><a href="/report/airplane_pilot_details">Number of working hours for all pilots (ascending and descending order)</a></li>
+                <li><a href="/report/passenger_bookings">List of the company destinations and their schedule</a></li>
+            </ul>
+        </div>
+    </div>
 {% endblock %}
+

@@ -16,12 +16,16 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, reverse_lazy
 from django.views.generic import RedirectView
-from myapp.views import details
+from myapp.views import booking_details
+from myapp.views import airplane_pilot_details
+from myapp.views import passenger_bookings
 
 from myapp import views
 
 urlpatterns = [
     path('', RedirectView.as_view(url=reverse_lazy('admin:index'))),
     path('admin/', admin.site.urls),
-    path('report/details', details)
+    path('report/booking_details', booking_details),
+    path('report/airplane_pilot_details', airplane_pilot_details),
+    path('report/passenger_bookings', passenger_bookings)
 ]
