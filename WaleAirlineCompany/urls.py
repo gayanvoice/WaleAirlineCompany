@@ -19,6 +19,10 @@ from django.views.generic import RedirectView
 from myapp.views import booking_details
 from myapp.views import airplane_pilot_details
 from myapp.views import passenger_bookings
+from myapp.views import pilot_schedule_by_month
+from myapp.views import number_of_passengers_by_flight
+from myapp.views import number_of_working_hours_by_pilot
+from myapp.views import destinations_and_bookings
 
 from myapp import views
 
@@ -27,5 +31,9 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('report/booking_details', booking_details),
     path('report/airplane_pilot_details', airplane_pilot_details),
-    path('report/passenger_bookings', passenger_bookings)
+    path('report/passenger_bookings', passenger_bookings),
+    path('report/pilot_schedule_by_month', pilot_schedule_by_month),
+    path('report/number_of_passengers_by_flight', number_of_passengers_by_flight),
+    path('report/number_of_working_hours_by_pilot', number_of_working_hours_by_pilot),
+    path('report/destinations_and_bookings', destinations_and_bookings)
 ]
